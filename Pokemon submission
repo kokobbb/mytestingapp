@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import pandas as pd
+import matplotlib.pyplot as plt 
 import random
 
 def get_pokemon_data(pokemon_id):
@@ -36,10 +37,22 @@ if st.button('Fetch Pokémon Data'):
                 'weight': [pokemon['weight'] for pokemon in random_pokemon_data]
             })
 
-            st.subheader('Height Comparison')
-            st.bar_chart(df.set_index('name')['height'])
+            fig, ax = plt.subplots()
 
-            st.subheader('Weight Comparison')
-            st.bar_chart(df.set_index('name')['weight'])
+            bar_colors = ['blue' if name == pokemon_data['name'] else 'red' for name in df['name']]
+            ax.bar(df['name'], df['height'], color=bar_colors)
+            ax.set_xlabel('Pokémon')
+            ax.set_ylabel('Height')
+            plt.xticks(rotation=45)
+            st.pyplot(fig)
+
+            fig, ax = plt.subplots()
+            bar_colors = ['blue' if name == pokemon_data['name'] else 'red' for name in df['name']]
+            ax.bar(df['name'], df['weight'], color=bar_colors)
+            ax.set_xlabel('Pokémon')
+            ax.set_ylabel('Weight')
+            plt.xticks(rotation=45)
+            st.pyplot(fig)
         else:
             st.error("Pokémon not found. Please enter a valid ID.")
+# no more changes but now cant get matplotlib to work anymore despite signing out and back in again which was a fix i saw online
